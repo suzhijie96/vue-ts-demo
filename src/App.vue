@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <global-header :user="user"></global-header>
-    <form action="">
+    <global-header :user="user"></global-header>s
+    <validate-form @form-submit="onSubmitForm">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入邮箱地址" type="text" ></validate-input>
@@ -18,8 +18,11 @@
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Remember</label>
       </div>
-      <button type="submit" class="btn btn-primary">登陆</button>
-    </form>
+<!--      <button type="submit" class="btn btn-primary">登陆</button>-->
+      <template #submit>
+        <span class="btn btn-danger">submit</span>
+      </template>
+    </validate-form>
   </div>
 </template>
 
@@ -30,6 +33,7 @@ import ValidateInput, { RulesProp } from "@/hooks/ValidateInput.vue";
 // import ColumnList, { ColumnProps } from './hooks/ColumnList.vue';
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue';
 import testData from './testData';
+import ValidateForm from "@/components/ValidateForm.vue";
 
 const currentUser: UserProps = {
   isLogin: true,
@@ -42,7 +46,8 @@ export default defineComponent({
   components: {
     // ColumnList,
     ValidateInput,
-    GlobalHeader
+    GlobalHeader,
+    ValidateForm
   },
   inheritAttrs: false,
   setup() {
@@ -64,12 +69,16 @@ export default defineComponent({
 
     ]
     const emailVal = ref(null)
+    const onSubmitForm = (result: boolean) => {
+      console.log('result',result)
+    }
     return {
       list: testData,
       user: currentUser,
       emailRules,
       passwordRules,
-      emailVal
+      emailVal,
+      onSubmitForm
     }
   }
 });
